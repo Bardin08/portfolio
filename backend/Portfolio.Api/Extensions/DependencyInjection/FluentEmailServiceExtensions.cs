@@ -8,6 +8,9 @@ public static class FluentEmailServiceExtensions
     public static IServiceCollection AddFluentEmailServices(
         this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<EmailAccountOptions>(
+            configuration.GetSection(EmailAccountOptions.SectionName));
+
         var emailOptions = configuration
             .GetRequiredSection(EmailAccountOptions.SectionName)
             .Get<EmailAccountOptions>();

@@ -1,13 +1,16 @@
 using FluentEmail.Core;
 using FluentEmail.Core.Models;
+using Microsoft.Extensions.Options;
+using Portfolio.Api.Configuration;
 using Portfolio.Api.Models.Requests;
 using Portfolio.Api.Notifications.Emails.Models;
 
 namespace Portfolio.Api.Notifications.Emails.Services;
 
-internal class EmailService(IFluentEmail fluentEmail)
+internal class EmailService(IFluentEmail fluentEmail, IOptions<EmailAccountOptions> emailAccountOptions)
 {
     private readonly IFluentEmail _fluentEmail = fluentEmail;
+    private readonly string _adminEmail = emailAccountOptions.Value.AdminEmail;
 
     public async Task SendServiceRequestEmailsAsync(ServicesRequest request)
     {
@@ -26,7 +29,7 @@ internal class EmailService(IFluentEmail fluentEmail)
             notificationModel);
 
         var adminEmailTask = GetSendEmailTask(
-            request.Email,
+            _adminEmail,
             EmailConstants.AdminEmail.Subject.Replace("{0}", request.Name),
             EmailConstants.AdminEmail.Template,
             request);
@@ -73,7 +76,7 @@ internal class EmailService(IFluentEmail fluentEmail)
             Link: string.Empty);
 
         await GetSendEmailTask(
-            req.Email,
+            _adminEmail,
             EmailConstants.AdminEmail.Subject.Replace("{0}", req.Name),
             EmailConstants.AdminEmail.Template,
             serviceRequest);
