@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Development Journey</title>
+    <style>
+        body {
+            font-size: 14pt;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2C3E50;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #FFFFFF;
+        }
+
+        .header {
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        .premium-badge {
+            color: #0066cc;
+            font-weight: 500;
+            background: linear-gradient(120deg, #E3F2FD 0%, #FFFFFF 100%);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .next-steps {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .next-steps ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .next-steps li {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .collaboration-docs {
+            background: #e8f0fe;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .emoji-bullet {
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #0066cc;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 15px 0;
+            transition: background 0.3s ease;
+        }
+
+        .button:hover {
+            background: #0052a3;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h2>Welcome to Your <span class="premium-badge">✨ Premium Development Journey</span></h2>
+</div>
+
+<p>Dear @Model.ClientName,</p>
+
+<p>
+    🤝 Thank you for choosing me as your premium development partner. I'm honored by your trust and excited to begin this
+    journey of transforming your vision into reality. Your request has been received and is being given my immediate
+    attention.
+</p>
+
+<div class="next-steps">
+    <h3>🎯 What Happens Next</h3>
+    <ul>
+        <li>
+            <span class="emoji-bullet">📋</span> Within the next 24 hours, I will thoroughly review your project
+            requirements
+        </li>
+        <li>
+            <span class="emoji-bullet">💡</span> You'll receive a detailed response addressing your specific needs and
+            proposed solutions
+        </li>
+        <li>
+            <span class="emoji-bullet">🤝</span> We'll schedule an initial consultation to discuss your project in-depth
+        </li>
+        <li>
+            <span class="emoji-bullet">🚀</span> Together, we'll create a tailored roadmap for your project's success
+        </li>
+    </ul>
+</div>
+
+<div class="collaboration-docs">
+    <h3>📚 Collaborative Workspace</h3>
+    <p>I've created a dedicated workspace for our collaboration:</p>
+    <a href="@Model.GoogleDocsUrl" class="button">🔗 Access Your Project Documentation</a>
+    <p>
+        ✏️ Feel free to add your questions, notes, and thoughts to this document. This will help us make our sessions
+        more productive.
+    </p>
+</div>
+
+<p>
+    🌟 In preparation for our discussion, feel free to gather any additional information or questions you'd like to
+    explore. My goal is to ensure our collaboration yields exceptional results that drive your business forward.
+</p>
+</body>
+</html>
