@@ -2,11 +2,10 @@ using FluentEmail.Core;
 using FluentEmail.Core.Models;
 using Portfolio.Api.Models.Requests;
 using Portfolio.Api.Notifications.Emails.Models;
-using Portfolio.Api.Workspaces.Services;
 
 namespace Portfolio.Api.Notifications.Emails.Services;
 
-internal class EmailService(WorkspaceService workspaceService, IFluentEmail fluentEmail)
+internal class EmailService(IFluentEmail fluentEmail)
 {
     private readonly IFluentEmail _fluentEmail = fluentEmail;
 
