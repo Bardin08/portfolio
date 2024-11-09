@@ -23,17 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Notifications\Emails\" />
-      <Folder Include="Resources\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Update="Notifications\Emails\Templates\CustomerNotification.cshtml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Update="Notifications\Emails\Templates\AdminNotification.cshtml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
+      <None Include="Notifications\Emails\Templates\**" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>
