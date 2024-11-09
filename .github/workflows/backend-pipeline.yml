@@ -1,0 +1,155 @@
+name: Backend API Pipeline
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'backend/**'
+  push:
+    branches:
+      - master
+    paths:
+      - 'backend/**'
+  workflow_dispatch:
+
+env:
+  SOLUTION_NAME: Portfolio.sln
+  APPLICATION_SOURCES_ROOT: backend
+  APPLICATION_NAME: Portfolio.Api
+  DOTNET_SDK_VERSION: 8.x
+  DOTNET_NOLOGO: true
+  GHCR_REGISTRY: ghcr.io/bardin08
+  GHCR_REPOSITORY: portfolio-api
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.semver.outputs.VERSION }}
+      branch_name: ${{ steps.get_branch.outputs.branch_name }}
+      commit_hash: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate SemVer version
+        id: semver
+        run: |
+          MAJOR=0
+          MINOR=$(git rev-list --count origin/master)
+          PATCH=$(git rev-list --count HEAD ^origin/master)
+          BUILD_METADATA=${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}
+          VERSION="$MAJOR.$MINOR.$PATCH-$BUILD_METADATA"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Get actual branch name
+        id: get_branch
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
+          else
+            echo "BRANCH_NAME=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+          fi
+          echo " ranch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Create build metadata JSON
+        id: build_metadata
+        run: |
+          BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          echo "BUILD_TIME=$BUILD_TIME" >> $GITHUB_ENV
+
+          echo '{
+            "Version": "${{ env.VERSION }}",
+            "CommitHash": "${{ github.sha }}",
+            "Branch": "${{ env.BRANCH_NAME }}",
+            "BuildTime": "$BUILD_TIME",
+            "BuildNumber": "${{ github.run_number }}"
+          }' > build-metadata.json
+
+      - name: Save Build Metadata as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-metadata
+          path: build-metadata.json
+
+  build:
+    runs-on: ubuntu-latest
+    needs: versioning
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore NuGet packages cache
+        id: nuget-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}-${{ hashFiles('**/*.sln') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
+
+      - name: Restore NuGet packages
+        run: dotnet restore backend/${{ env.SOLUTION_NAME }}
+
+      - name: Cache updated NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}-${{ hashFiles('**/*.sln') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+        if: steps.nuget-cache.outputs.cache-hit != 'true'
+
+      - name: Build Backend API
+        run: |
+          dotnet publish \
+          ${{ env.APPLICATION_SOURCES_ROOT }}/${{ env.APPLICATION_NAME }}/${{ env.APPLICATION_NAME }}.csproj \
+          --configuration Release \
+          --no-restore \
+          --output backend/output \
+          /p:Version=${{ needs.versioning.outputs.version }}
+
+      - name: Download Build Metadata Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-metadata
+          path: backend/output/
+
+      - name: Save build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: backend/output
+
+  docker:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: [build, versioning]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: backend/output/
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:${{ needs.versioning.outputs.version }} backend/
+          docker push ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:${{ needs.versioning.outputs.version }}
