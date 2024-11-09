@@ -15,10 +15,7 @@ builder.Services.AddCors(corsOptions =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<ContactInfoOptions>(
-    builder.Configuration.GetSection(ContactInfoOptions.SectionName));
-
-builder.Services.AddFluentEmailServices();
+builder.Services.AddFluentEmailServices(builder.Configuration);
 // builder.Services.AddGoogleServices(builder.Configuration);
 // builder.Services.AddScoped<WorkspaceService>();
 
