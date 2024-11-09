@@ -36,7 +36,7 @@ jobs:
             docker pull ghcr.io/bardin08/${{ env.GHCR_REPOSITORY }}:${{ inputs.version }}
             docker stop ${{ env.GHCR_REPOSITORY }} || true
             docker rm ${{ env.GHCR_REPOSITORY }} || true
-            docker run -d -p ${{ env.API_CONTAINER_PORT }}:8080 --name ${{ env.GHCR_REPOSITORY }} \
+            docker run -d -p ${{ env.API_CONTAINER_PORT }}:8080 --name ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:${{ inputs.version }} \
               -e SWAGGER_ENABLED="${{ vars.SWAGGER_ENABLED }}" \
               -e EmailAccount__AdminEmail="${{ vars.ADMIN_EMAIL }}" \
               -e EmailAccount__SenderName="${{ vars.SENDER_NAME }}" \
