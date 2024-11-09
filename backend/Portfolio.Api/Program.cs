@@ -1,7 +1,6 @@
 using Portfolio.Api.Configuration;
 using Portfolio.Api.Endpoints;
 using Portfolio.Api.Extensions.DependencyInjection;
-using Portfolio.Api.Workspaces.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +19,8 @@ builder.Services.Configure<ContactInfoOptions>(
     builder.Configuration.GetSection(ContactInfoOptions.SectionName));
 
 builder.Services.AddFluentEmailServices();
-builder.Services.AddGoogleServices(builder.Configuration);
-builder.Services.AddScoped<WorkspaceService>();
+// builder.Services.AddGoogleServices(builder.Configuration);
+// builder.Services.AddScoped<WorkspaceService>();
 
 var app = builder.Build();
 
