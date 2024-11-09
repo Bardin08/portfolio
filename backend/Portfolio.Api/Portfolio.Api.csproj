@@ -4,11 +4,36 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
+        <UserSecretsId>9955232d-7411-43de-8bcb-943f97a772a7</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentEmail.Razor" Version="3.0.2" />
+        <PackageReference Include="FluentEmail.Smtp" Version="3.0.2" />
+        <PackageReference Include="Google.Apis.Docs.v1" Version="1.68.0.3498" />
+        <PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3544" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Services\Emails\Templates\AdminNotification.cshtml" />
+      <_ContentIncludedByDefault Remove="Services\Emails\Templates\CustomerNotification.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Notifications\Emails\" />
+      <Folder Include="Resources\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="Notifications\Emails\Templates\CustomerNotification.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Notifications\Emails\Templates\AdminNotification.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
