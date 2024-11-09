@@ -15,15 +15,15 @@ internal class EmailService(WorkspaceService workspaceService, IFluentEmail flue
 
     public async Task SendServiceRequestEmailsAsync(ServicesRequest request)
     {
-        var workspaceRequest = new CreateWorkspaceRequest(request.Name + " Personal Workspace", _adminEmail);
-        var createWorkspaceResponse = await _workspaceService.CreateWorkspace(workspaceRequest);
+        // var workspaceRequest = new CreateWorkspaceRequest(request.Name + " Personal Workspace", _adminEmail);
+        // var createWorkspaceResponse = await _workspaceService.CreateWorkspace(workspaceRequest);
 
         var notificationModel = new ServiceRequestNotificationModel
         {
             ClientName = request.Name,
             ConsultantName = "Vladyslav Bardin",
             Location = "Kyiv, Ukraine",
-            GoogleDocsUrl = createWorkspaceResponse.DocumentUrl
+            GoogleDocsUrl = "N/A"
         };
 
         var customerEmailTask = GetSendEmailTask(
@@ -46,7 +46,7 @@ internal class EmailService(WorkspaceService workspaceService, IFluentEmail flue
         => _fluentEmail
             .To(emailAddress)
             .Subject(subject)
-            .UsingTemplateFromFile($"{Directory.GetCurrentDirectory()}/{template}", parameters)
+            .UsingTemplate(File.ReadAllText($"./Notifications/Emails/Templates/{template}"), parameters)
             .SendAsync();
 
     private static class EmailConstants
@@ -54,13 +54,13 @@ internal class EmailService(WorkspaceService workspaceService, IFluentEmail flue
         public static class AdminEmail
         {
             public const string Subject = "New Service Request from {0}";
-            public const string Template = "EmailTemplates/AdminNotification.cshtml";
+            public const string Template = "AdminNotification.cshtml";
         }
 
         public static class CustomerEmail
         {
             public const string Subject = "Welcome to Your Premium Development Journey - {0}";
-            public const string Template = "EmailTemplates/CustomerNotification.cshtml";
+            public const string Template = "CustomerNotification.cshtml";
         }
     }
 }

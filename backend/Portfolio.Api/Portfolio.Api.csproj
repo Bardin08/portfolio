@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <PreserveCompilationContext>true</PreserveCompilationContext>
+        <UserSecretsId>9955232d-7411-43de-8bcb-943f97a772a7</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,6 +25,15 @@
     <ItemGroup>
       <Folder Include="Notifications\Emails\" />
       <Folder Include="Resources\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="Notifications\Emails\Templates\CustomerNotification.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Notifications\Emails\Templates\AdminNotification.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
