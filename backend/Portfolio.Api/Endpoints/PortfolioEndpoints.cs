@@ -13,5 +13,12 @@ public static class PortfolioEndpoints
         {
             await es.SendServiceRequestEmailsAsync(req);
         });
+
+        app.MapPost("/services/mentoring", async (
+            [FromBody] MentoringRequest req, [FromServices] EmailService es) =>
+        {
+            await es.SendMentoringRequestEmailsAsync(req);
+            return Results.Ok();
+        });
     }
 }

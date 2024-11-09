@@ -2,22 +2,16 @@ using FluentEmail.Core;
 using FluentEmail.Core.Models;
 using Portfolio.Api.Models.Requests;
 using Portfolio.Api.Notifications.Emails.Models;
-using Portfolio.Api.Workspaces.Models;
 using Portfolio.Api.Workspaces.Services;
 
 namespace Portfolio.Api.Notifications.Emails.Services;
 
 internal class EmailService(WorkspaceService workspaceService, IFluentEmail fluentEmail)
 {
-    private readonly WorkspaceService _workspaceService = workspaceService;
     private readonly IFluentEmail _fluentEmail = fluentEmail;
-    private readonly string _adminEmail = "vbardin810@gmail.com";
 
     public async Task SendServiceRequestEmailsAsync(ServicesRequest request)
     {
-        // var workspaceRequest = new CreateWorkspaceRequest(request.Name + " Personal Workspace", _adminEmail);
-        // var createWorkspaceResponse = await _workspaceService.CreateWorkspace(workspaceRequest);
-
         var notificationModel = new ServiceRequestNotificationModel
         {
             ClientName = request.Name,
@@ -62,5 +56,27 @@ internal class EmailService(WorkspaceService workspaceService, IFluentEmail flue
             public const string Subject = "Welcome to Your Premium Development Journey - {0}";
             public const string Template = "CustomerNotification.cshtml";
         }
+    }
+
+    public async Task SendMentoringRequestEmailsAsync(MentoringRequest req)
+    {
+        var description = $"""
+                          Preferred Contact: {req.MessengerType}
+                          Mentoring Direction: {req.MentoringDirection}
+                          
+                          Expectations: {req.GoalsAndExpectations}
+                          """;
+
+        var serviceRequest = new ServicesRequest(
+            Name: req.Name,
+            Email: req.Email,
+            Description: description,
+            Link: string.Empty);
+
+        await GetSendEmailTask(
+            req.Email,
+            EmailConstants.AdminEmail.Subject.Replace("{0}", req.Name),
+            EmailConstants.AdminEmail.Template,
+            serviceRequest);
     }
 }
