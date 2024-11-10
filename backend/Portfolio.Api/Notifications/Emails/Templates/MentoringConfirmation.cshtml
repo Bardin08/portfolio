@@ -1,0 +1,184 @@
+@model Portfolio.Api.Notifications.Emails.Models.MentoringConfirmation;
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Підтвердження менторства</title>
+    <style>
+        /* Gmail-specific inline styles */
+        .email-container {
+            max-width: 600px !important;
+            margin: 0 auto !important;
+            font-family: Arial, sans-serif !important;
+            line-height: 1.6 !important;
+            color: #1e293b !important;
+        }
+
+        .header {
+            background-color: #2563eb !important;
+            color: white !important;
+            padding: 24px !important;
+            text-align: center !important;
+            border-radius: 8px 8px 0 0 !important;
+        }
+
+        .content {
+            background-color: white !important;
+            padding: 24px !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 0 0 8px 8px !important;
+        }
+
+        .greeting {
+            font-size: 18px !important;
+            font-weight: bold !important;
+            margin-bottom: 16px !important;
+        }
+
+        .message {
+            margin-bottom: 24px !important;
+            color: #4a5568 !important;
+        }
+
+        .steps {
+            background-color: #f8fafc !important;
+            padding: 16px !important;
+            border-radius: 8px !important;
+            margin-bottom: 24px !important;
+        }
+
+        .steps h2 {
+            margin-top: 0 !important;
+            margin-bottom: 16px !important;
+            color: #1e293b !important;
+            font-size: 16px !important;
+        }
+
+        .step {
+            display: flex !important;
+            margin-bottom: 12px !important;
+            color: #4a5568 !important;
+        }
+
+        .step-number {
+            background-color: #2563eb !important;
+            color: white !important;
+            width: 24px !important;
+            height: 24px !important;
+            border-radius: 12px !important;
+            text-align: center !important;
+            margin-right: 12px !important;
+            font-weight: bold !important;
+            line-height: 24px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .cta-button {
+            display: inline-block !important;
+            background-color: #2563eb !important;
+            color: white !important;
+            text-decoration: none !important;
+            padding: 16px 32px !important;
+            border-radius: 8px !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            margin-bottom: 24px !important;
+        }
+
+        .contact {
+            border-top: 1px solid #e2e8f0 !important;
+            padding-top: 24px !important;
+            color: #4a5568 !important;
+            font-size: 14px !important;
+        }
+
+        .contact p {
+            margin-bottom: 8px !important;
+        }
+
+        .contact a {
+            color: #2563eb !important;
+            text-decoration: none !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+
+        .contact-items {
+            display: flex !important;
+            gap: 16px !important;
+            margin-top: 12px !important;
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 24px; background-color: #f8fafc;">
+<div class="email-container">
+    <div class="header">
+        <h1 style="margin: 0; font-size: 24px;">Вітаю у програмі менторства! 👋</h1>
+    </div>
+    <div class="content">
+        <p class="greeting">Привіт, @Model.Name!</p>
+
+        <div class="message">
+            Дякую за твій інтерес до програми менторства. Я радий, що ти вирішив/ла інвестувати у свій професійний розвиток.
+        </div>
+
+        <div class="steps">
+            <h2>Наступні кроки:</h2>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>Обери зручний час для нашої першої зустрічі у календарі нижче</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>Підготуй питання та теми, які хочеш обговорити</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>На зустрічі ми детально обговоримо твої цілі та складемо індивідуальний план розвитку</div>
+            </div>
+        </div>
+
+        <center>
+            <a href="@Model.BookMeLink" class="cta-button">
+                Запланувати знайомство
+            </a>
+        </center>
+
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid #e2e8f0; padding-top: 32px;">
+            <tr>
+                <td style="color: #1e293b; font-size: 15px; padding-bottom: 20px;">
+                    Якщо виникнуть питання, завжди на зв'язку:
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table width="100%" cellpadding="12" cellspacing="0" border="0" style="background-color: #f8fafc; border-radius: 8px; margin-bottom: 12px;">
+                        <tr>
+                            <td>
+                                <a href="https://t.me/bardin08" style="color: #2563eb; text-decoration: none; display: block;">
+                                    <span style="font-size: 20px; margin-right: 12px; vertical-align: middle;">💬</span>
+                                    @@bardin08
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                    <table width="100%" cellpadding="12" cellspacing="0" border="0" style="background-color: #f8fafc; border-radius: 8px;">
+                        <tr>
+                            <td>
+                                <a href="mailto:vbardin810@gmail.com" style="color: #2563eb; text-decoration: none; display: block;">
+                                    <span style="font-size: 20px; margin-right: 12px; vertical-align: middle;">📧</span>
+                                    vbardin810@gmail.com
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -6,4 +6,5 @@ public record EmailAccountOptions
     public required string AdminEmail { get; init; }
     public required string SenderName { get; init; }
     public required string AppPassword { get; init; }
+    public required string BookMeLink { get; init; }
 }

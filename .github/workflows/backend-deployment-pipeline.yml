@@ -40,5 +40,6 @@ jobs:
               -e SWAGGER_ENABLED="${{ vars.SWAGGER_ENABLED }}" \
               -e EmailAccount__AdminEmail="${{ vars.ADMIN_EMAIL }}" \
               -e EmailAccount__SenderName="${{ vars.SENDER_NAME }}" \
+              -e EmailAccount__BookMeLink="${{ vars.BOOK_ME_LINK }}" \
               -e EmailAccount__AppPassword="${{ secrets.EMAIL_APP_PASSWORD }}" \
               ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:${{ inputs.version }}
