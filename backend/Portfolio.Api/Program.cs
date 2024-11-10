@@ -22,6 +22,7 @@ builder.Services.AddCors(corsOptions =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<GeoService>();
 builder.Services.AddFluentEmailServices(builder.Configuration);
 // builder.Services.AddGoogleServices(builder.Configuration);
 // builder.Services.AddScoped<WorkspaceService>();
@@ -37,6 +38,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("CorsPolicy");
 app.MapHealthEndpoints();
 app.MapPortfolioEndpoints();
+app.MapTrackingEndpoints();
 
 app.Run();
 
