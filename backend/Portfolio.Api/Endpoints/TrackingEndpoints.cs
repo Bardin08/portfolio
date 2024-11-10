@@ -31,17 +31,19 @@ public static class TrackingEndpoints
             if (pe is { EventType: "view", ElementId: "landingPage", AdditionalData: not null })
             {
                 var ipAddress = req.GetClientIpAddress();
-                var geoInfo = await gs.GetGeoInfoByIp(ipAddress);
-
-                if (geoInfo != null)
+                if (!string.IsNullOrEmpty(ipAddress))
                 {
-                    pe = pe with
+                    var geoInfo = await gs.GetGeoInfoByIp(ipAddress);
+                    if (geoInfo != null)
                     {
-                        AdditionalData = pe.AdditionalData with
+                        pe = pe with
                         {
-                            GeoLocation = geoInfo
-                        }
-                    };
+                            AdditionalData = pe.AdditionalData with
+                            {
+                                GeoLocation = geoInfo
+                            }
+                        };
+                    }
                 }
             }
 
@@ -52,9 +54,9 @@ public static class TrackingEndpoints
 
 public static class IpAddressHelper
 {
-    public static string GetClientIpAddress(this HttpContext context)
+    public static string? GetClientIpAddress(this HttpContext context)
     {
-        var headersToCheck = new[] { "X-Forwarded-For", "X-Real-IP", "CF-Connecting-IP" };
+        var headersToCheck = new[] { "X-Forwarded-For" };
 
         foreach (var header in headersToCheck)
         {
@@ -72,6 +74,6 @@ public static class IpAddressHelper
         }
 
         // Fallback to the RemoteIpAddress if headers are not available or invalid
-        return context.Connection.RemoteIpAddress?.ToString() ?? "IP not available";
+        return context.Connection.RemoteIpAddress?.ToString();
     }
 }
