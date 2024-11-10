@@ -11,6 +11,7 @@ internal class EmailService(IFluentEmail fluentEmail, IOptions<EmailAccountOptio
 {
     private readonly IFluentEmail _fluentEmail = fluentEmail;
     private readonly string _adminEmail = emailAccountOptions.Value.AdminEmail;
+    private readonly string _bookMePageLink = emailAccountOptions.Value.BookMeLink;
 
     public async Task SendServiceRequestEmailsAsync(ServicesRequest request)
     {
@@ -58,6 +59,12 @@ internal class EmailService(IFluentEmail fluentEmail, IOptions<EmailAccountOptio
             public const string Subject = "Welcome to Your Premium Development Journey - {0}";
             public const string Template = "CustomerNotification.cshtml";
         }
+
+        public static class MentoringEmail
+        {
+            public const string Subject = "{0}, вітаємо у програмі Premium IT Mentoring! Наступний крок \u2192";
+            public const string Template = "MentoringConfirmation.cshtml";
+        }
     }
 
     public async Task SendMentoringRequestEmailsAsync(MentoringRequest req)
@@ -75,10 +82,24 @@ internal class EmailService(IFluentEmail fluentEmail, IOptions<EmailAccountOptio
             Description: description,
             Link: string.Empty);
 
-        await GetSendEmailTask(
+        var mentoringRequest = new MentoringConfirmation
+        {
+            Name = req.Name,
+            BookMeLink = _bookMePageLink,
+        };
+
+        var adminMail = GetSendEmailTask(
             _adminEmail,
             EmailConstants.AdminEmail.Subject.Replace("{0}", req.Name),
             EmailConstants.AdminEmail.Template,
             serviceRequest);
+
+        var menteeMail = GetSendEmailTask(
+            serviceRequest.Email,
+            EmailConstants.MentoringEmail.Subject.Replace("{0}", req.Name),
+            EmailConstants.MentoringEmail.Template,
+            mentoringRequest);
+
+        await Task.WhenAll(menteeMail, adminMail);
     }
 }
