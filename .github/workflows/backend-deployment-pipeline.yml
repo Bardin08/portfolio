@@ -42,4 +42,5 @@ jobs:
               -e EmailAccount__SenderName="${{ vars.SENDER_NAME }}" \
               -e EmailAccount__BookMeLink="${{ vars.BOOK_ME_LINK }}" \
               -e EmailAccount__AppPassword="${{ secrets.EMAIL_APP_PASSWORD }}" \
+              -e EmailAccount__AppPassword="${{ secrets.MongoDb__ConnectionString }}" \
               ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:${{ inputs.version }}
